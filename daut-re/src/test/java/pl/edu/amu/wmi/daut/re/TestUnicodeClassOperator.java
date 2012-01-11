@@ -205,7 +205,7 @@ public class TestUnicodeClassOperator extends TestCase {
     public final void testUnicodeClassOperatorBuhid() {
 
         ArrayList<String> params = new ArrayList<String>();
-        params.add("Pi");
+        params.add("Buhid");
         RegexpOperator spec = (new UnicodeClassOperator.Factory()).createOperator(params);
         NondeterministicAutomatonByThompsonApproach automaton =
             new NondeterministicAutomatonByThompsonApproach(spec.createAutomaton(
@@ -2414,7 +2414,7 @@ public class TestUnicodeClassOperator extends TestCase {
         assertFalse(automaton.accepts(""));
         assertFalse(automaton.accepts(" "));
         assertFalse(automaton.accepts("\u0100"));
-        assertFalse(automaton.accepts("\u0020"));
+        assertFalse(automaton.accepts("\u0019"));
         assertFalse(automaton.accepts("w"));
     }
 
@@ -2439,7 +2439,7 @@ public class TestUnicodeClassOperator extends TestCase {
         assertFalse(automaton.accepts(""));
         assertFalse(automaton.accepts(" "));
         assertFalse(automaton.accepts("\u0100"));
-        assertFalse(automaton.accepts("\u0020"));
+        assertFalse(automaton.accepts("\u0019"));
         assertFalse(automaton.accepts("w"));
     }
 
@@ -2464,7 +2464,7 @@ public class TestUnicodeClassOperator extends TestCase {
         assertFalse(automaton.accepts(""));
         assertFalse(automaton.accepts(" "));
         assertFalse(automaton.accepts("\u0100"));
-        assertFalse(automaton.accepts("\u0020"));
+        assertFalse(automaton.accepts("\u0019"));
         assertFalse(automaton.accepts("w"));
     }
 
@@ -2489,7 +2489,7 @@ public class TestUnicodeClassOperator extends TestCase {
         assertFalse(automaton.accepts(""));
         assertFalse(automaton.accepts(" "));
         assertFalse(automaton.accepts("\u0100"));
-        assertFalse(automaton.accepts("\u0020"));
+        assertFalse(automaton.accepts("\u0019"));
         assertFalse(automaton.accepts("w"));
     }
 
@@ -2596,7 +2596,7 @@ public class TestUnicodeClassOperator extends TestCase {
         assertTrue(automaton.accepts("\u200A"));
 
         assertFalse(automaton.accepts(""));
-        assertFalse(automaton.accepts(" "));
+        assertFalse(automaton.accepts("\u0099"));
         assertFalse(automaton.accepts("\u0100"));
         assertFalse(automaton.accepts("\u002A"));
         assertFalse(automaton.accepts("w"));
