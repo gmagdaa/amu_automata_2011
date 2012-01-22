@@ -1,5 +1,8 @@
 package pl.edu.amu.wmi.daut.re;
 
+import pl.edu.amu.wmi.daut.base.State;
+import pl.edu.amu.wmi.daut.base.AutomatonSpecification;
+import pl.edu.amu.wmi.daut.base.OutgoingTransition;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
