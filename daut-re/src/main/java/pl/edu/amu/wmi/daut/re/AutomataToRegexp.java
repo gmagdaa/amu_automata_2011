@@ -1,7 +1,7 @@
 package pl.edu.amu.wmi.daut.re;
 
 import pl.edu.amu.wmi.daut.base.State;
-import pl.edu.amu.wmi.daut.base.Automatonspecification;
+import pl.edu.amu.wmi.daut.base.AutomatonSpecification;
 import pl.edu.amu.wmi.daut.base.OutgoingTransition;
 import pl.edu.amu.wmi.daut.base.TransitionLabel;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class AutomataToRegexp {
     /**
      * Konwertuje automat do wyrazenia regularnego.
      */
-    public static String createRegularExpression(Automatonspecification automaton) {
+    public static String createRegularExpression(AutomatonSpecification automaton) {
         String regexp = "";
         State initial = automaton.getInitialState();
         List<State> finalStates = new LinkedList<State>();
@@ -71,14 +71,14 @@ public class AutomataToRegexp {
                 previous = new LinkedList<State>();
                 for (State st : previousStates.get(prevState))
                     previous.add(st);
-                previousBackup.put(s, previous);
+                previousBackup.put(prevState, previous);
             }
             nextBackup = new HashMap<State, List<State>>();
             for (State prevState : nextStates.keySet()) {
                 next = new LinkedList<State>();
                 for (State st : nextStates.get(prevState))
                     next.add(st);
-                nextBackup.put(s, next);
+                nextBackup.put(prevState, next);
             }
 
             for (State toRemove : finalStates) {
