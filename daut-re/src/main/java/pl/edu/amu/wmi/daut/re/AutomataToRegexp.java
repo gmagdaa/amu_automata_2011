@@ -3,7 +3,6 @@ package pl.edu.amu.wmi.daut.re;
 import pl.edu.amu.wmi.daut.base.State;
 import pl.edu.amu.wmi.daut.base.AutomatonSpecification;
 import pl.edu.amu.wmi.daut.base.OutgoingTransition;
-import pl.edu.amu.wmi.daut.base.TransitionLabel;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +23,11 @@ public class AutomataToRegexp {
     private static Map<String, String> transitionLabelsBackup = new HashMap<String, String>();
     private static Stack<Integer> bracketStack = new Stack<Integer>();
     private static Stack<Boolean> bracketRemove = new Stack<Boolean>();
+
+    /**
+     * Domyslny konstruktor.
+     */
+    private AutomataToRegexp() {}
 
     /**
      * Konwertuje automat do wyrazenia regularnego.
@@ -176,7 +180,7 @@ public class AutomataToRegexp {
                     spn = "(" + sp + ")" + "(" + u + ")*" + "(" + sn + ")";
                 if (tp.length() > 0) {
                     if (rp.length() > 0)
-                        rp = rp+ "|" + "(" + sp + ")" + "(" + u + ")*" + "(" + tp + ")";
+                        rp = rp + "|" + "(" + sp + ")" + "(" + u + ")*" + "(" + tp + ")";
                     else
                         rp = "(" + sp + ")" + "(" + u + ")*" + "(" + tp + ")";
                 }
@@ -257,12 +261,11 @@ public class AutomataToRegexp {
                     }
                     else if (reg.charAt(i + j) == ')') {
                         if (removeBracket) {
-                            if (i + j + 1 < reg.length() && j - i > 2) {
+                            if (i + j + 1 < reg.length() && j - i > 2)
                                 if (reg.charAt(i + j + 1) == '*') {
                                     i = i + j + 1;
                                     leave = true;
                                 }
-                            }
                             if (!leave) {
                                 reg = removeChars(reg, i + j, 1);
                                 reg = removeChars(reg, i, 1);
@@ -308,33 +311,29 @@ public class AutomataToRegexp {
                 expr = reg.substring(beg + 1, ind - 1);
                 len = expr.length();
                 if (expr.contains("|")) {
-                    if (ind + len + 2 < reg.length()) {
+                    if (ind + len + 2 < reg.length())
                         if (reg.substring(ind + 1, ind + 1 + len + 2).equals("(" + expr + ")")) {
                             replace(reg, ind, '+');
                             removeChars(reg, ind + 1, len + 2);
                         }
-                    }
-                    if (ind - 4 - len * 2 >= 0) {
-                        if (reg.substring(ind - 4 - len * 2, ind - 2 - len).equals(
+                    if (ind - (2 - len) * 2 >= 0)
+                        if (reg.substring(ind - (2 - len) * 2, ind - 2 - len).equals(
                                 "(" + expr + ")")) {
                             replace(reg, ind, '+');
-                            removeChars(reg, ind - 4 - len * 2, len + 2);
+                            removeChars(reg, ind - (2 - len) * 2, len + 2);
                         }
-                    }
                 }
                 else {
-                    if (ind + len < reg.length()) {
+                    if (ind + len < reg.length())
                         if (reg.substring(ind + 1, ind + 1 + len).equals(expr)) {
                             replace(reg, ind, '+');
                             removeChars(reg, ind + 1, len);
                         }
-                    }
-                    if (ind - 2 - len * 2 >= 0) {
+                    if (ind - 2 - len * 2 >= 0)
                         if (reg.substring(ind - 2 - len * 2, ind - 2 - len).equals(expr)) {
                             replace(reg, ind, '+');
                             removeChars(reg, ind - 2 - len * 2, len);
                         }
-                    }
                 }
             }
             else {
@@ -344,7 +343,7 @@ public class AutomataToRegexp {
                             reg = removeChars(reg, ind + 1, 1);
                         }
                 if (ind - 2 >= 0) {
-                    if (reg.charAt(ind - 2)==character) {
+                    if (reg.charAt(ind - 2) == character) {
                         reg = replace(reg, ind, '+');
                         reg = removeChars(reg, ind - 2, 1);
                     }
