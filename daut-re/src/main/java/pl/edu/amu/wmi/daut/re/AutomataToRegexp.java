@@ -136,7 +136,7 @@ public class AutomataToRegexp {
 
     /**
      * 'Usuwa' stan z automatu, tworzac nowe etykiety przejscia.
-     * @param state - usuwany stan
+     * @param state - usuwany stan.
      */
     private static void remove(State state) {
         String Rp, Sp, U, Tp, Rn, Sn, Tn, Spn;
