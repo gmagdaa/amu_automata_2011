@@ -30,8 +30,8 @@ public class AutomataToRegexp {
         State initial = automaton.getInitialState();
         List<State> finalStates = new LinkedList<State>();
 
-        List<State> next;       //lista tymczasowa
-        List<State> previous;   //lista tymczasowa
+        List<State> next;       //lista tymczasowa.
+        List<State> previous;   //lista tymczasowa.
         for (State state : automaton.allStates()) {
             next = new LinkedList<State>();
             for (OutgoingTransition out : automaton.allOutgoingTransitions(state)) {
