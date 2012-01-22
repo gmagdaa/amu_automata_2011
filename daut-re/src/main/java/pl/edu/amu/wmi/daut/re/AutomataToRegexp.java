@@ -352,7 +352,7 @@ public class AutomataToRegexp {
     /**
      * @param reg - wyrazenie ktore jest zmieniane.
      * @param ind - pozycja znaku do zmiany.
-     * @param newChar - nowy znak, ktĂłry ma zostaÄ‡ umieszczony.
+     * @param newChar - nowy znak, ktory ma zostac umieszczony.
      */
     private static String replace(String reg, int ind, char newChar) {
         reg = reg.substring(0, ind) + newChar + reg.substring(ind+1);
