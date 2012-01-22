@@ -13,7 +13,7 @@ import java.util.Stack;
  * Klasa zwracajaca wyrazenie regularne ackeptujace ten sam jezyk co przekazany deterministyczny
  * automat skonczenie stanowy.
  */
-public class AutomataToRegexp {
+public final class AutomataToRegexp {
 
     private static Map<State, List<State>> previousStates = new HashMap<State,  List<State>>();
     private static Map<State, List<State>> nextStates = new HashMap<State,  List<State>>();
@@ -27,7 +27,7 @@ public class AutomataToRegexp {
     /**
      * Domyslny konstruktor.
      */
-    private AutomataToRegexp() {}
+    private AutomataToRegexp() { }
 
     /**
      * Konwertuje automat do wyrazenia regularnego.
@@ -48,8 +48,7 @@ public class AutomataToRegexp {
                     previous = previousStates.get(target);
                     previous.add(state);
                     previousStates.put(target, previous);
-                }
-                else {
+                } else {
                     previous = new LinkedList<State>();
                     previous.add(state);
                     previousStates.put(target, previous);
@@ -95,11 +94,9 @@ public class AutomataToRegexp {
                         regexp = "(\u03B5)";
                     else
                         regexp = "(" + transitionLabels.get(hashOf(state, state)) + ")*";
-                }
-                else
+                } else
                     regexp = regexp + "|" + "(" + transitionLabels.get(hashOf(state, state)) + ")*";
-            }
-            else {
+            } else {
                 r = getLabel(initial, initial);
                 s = getLabel(initial, state);
                 u = getLabel(state, state);
@@ -110,8 +107,7 @@ public class AutomataToRegexp {
                                 + "(" + s + ")" + "(" + u + ")*";
                     else
                         reg = "(" + r + ")*" + "(" + s + ")" + "(" + u + ")*";
-                }
-                else {
+                } else {
                     if (t.length() > 0)
                         reg = "((" + s + ")" + "(" + u + ")*" + "(" + t + ")" + ")*" + "(" + s + ")"
                                 + "(" + u + ")*";
@@ -273,21 +269,17 @@ public class AutomataToRegexp {
                                     i = bracketStack.pop();
                                     removeBracket = bracketRemove.pop();
                                     j = 1;
-                                }
-                                else
+                                } else
                                     leave = true;
                             }
-                        }
-                        else {
+                        } else {
                             i = i + j;
                             leave = true;
                         }
-                    }
-                    else if (reg.charAt(i + j) == '|') {
+                    } else if (reg.charAt(i + j) == '|') {
                         removeBracket = false;
                         j++;
-                    }
-                    else
+                    } else
                         j++;
                 } while (!leave);
             }
@@ -322,8 +314,7 @@ public class AutomataToRegexp {
                             replace(reg, ind, '+');
                             removeChars(reg, ind - (2 - len) * 2, len + 2);
                         }
-                }
-                else {
+                } else {
                     if (ind + len < reg.length())
                         if (reg.substring(ind + 1, ind + 1 + len).equals(expr)) {
                             replace(reg, ind, '+');
@@ -335,8 +326,7 @@ public class AutomataToRegexp {
                             removeChars(reg, ind - 2 - len * 2, len);
                         }
                 }
-            }
-            else {
+            } else {
                 if (ind + 1 < reg.length())
                     if (reg.charAt(ind + 1) == character) {
                             reg = replace(reg, ind, '+');
