@@ -254,8 +254,7 @@ public final class AutomataToRegexp {
                         i = i + j;
                         j = 1;
                         removeBracket = true;
-                    }
-                    else if (reg.charAt(i + j) == ')') {
+                    } else if (reg.charAt(i + j) == ')') {
                         if (removeBracket) {
                             if (i + j + 1 < reg.length() && j - i > 2)
                                 if (reg.charAt(i + j + 1) == '*') {
