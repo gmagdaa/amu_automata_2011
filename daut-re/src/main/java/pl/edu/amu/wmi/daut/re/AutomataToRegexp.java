@@ -67,16 +67,16 @@ public class AutomataToRegexp {
         for (State state : finalStates) {
             transitionLabelsBackup = new HashMap<String, String>(transitionLabels);
             previousBackup = new HashMap<State, List<State>>();
-            for (State s : previousStates.keySet()) {
+            for (State prevState : previousStates.keySet()) {
                 previous = new LinkedList<State>();
-                for (State st : previousStates.get(s))
+                for (State st : previousStates.get(prevState))
                     previous.add(st);
                 previousBackup.put(s, previous);
             }
             nextBackup = new HashMap<State, List<State>>();
-            for (State s : nextStates.keySet()) {
+            for (State prevState : nextStates.keySet()) {
                 next = new LinkedList<State>();
-                for (State st : nextStates.get(s))
+                for (State st : nextStates.get(prevState))
                     next.add(st);
                 nextBackup.put(s, next);
             }
@@ -108,7 +108,7 @@ public class AutomataToRegexp {
                         reg = "(" + r + ")*" + "(" + s + ")" + "(" + u + ")*";
                 }
                 else {
-                    if (T.length() > 0)
+                    if (t.length() > 0)
                         reg = "((" + s + ")" + "(" + u + ")*" + "(" + t + ")" + ")*" + "(" + s + ")"
                                 + "(" + u + ")*";
                     else
@@ -176,9 +176,9 @@ public class AutomataToRegexp {
                     spn = "(" + sp + ")" + "(" + u + ")*" + "(" + sn + ")";
                 if (tp.length() > 0) {
                     if (rp.length() > 0)
-                        rp = rp+ "|" + "(" + sp + ")" + "(" + u + ")*" + "(" + Tp + ")";
+                        rp = rp+ "|" + "(" + sp + ")" + "(" + u + ")*" + "(" + tp + ")";
                     else
-                        rp = "(" + sp + ")" + "(" + u + ")*" + "(" + Tp + ")";
+                        rp = "(" + sp + ")" + "(" + u + ")*" + "(" + tp + ")";
                 }
                 if (tn.length() > 0) {
                     if (rn.length() > 0)
