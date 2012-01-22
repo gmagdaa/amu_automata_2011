@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Stack;
 
 /**
- * Klasa zwracająca wyrażenie regularne ackeptujące ten sam język co przekazany deterministyczny
- * automat skończenie stanowy.
+ * Klasa zwracajaca wyrazenie regularne ackeptujace ten sam jezyk co przekazany deterministyczny
+ * automat skonczenie stanowy.
  */
 public class AutomataToRegexp {
 
