@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 /**
  * Test klasy AutomataToRegexp.
  */
-public class TestAutomataToRegexp {
+public class TestAutomataToRegexp extends TestCase {
    
     public final void testRegA() {
 
@@ -23,8 +23,7 @@ public class TestAutomataToRegexp {
         automatonA.markAsFinal(q1);
 
         String reg = AutomataToRegexp.createRegularExpression(automatonA);
-        assertTrue(reg.equals("a(a*|b*)"));
-        asserFalse(reg.equals("(a*|b*)a"));
+        assertTrue(reg.matches("a\\(a\\*\\|b\\*|b\\*\\|a\\*\\)"));
+        assertFalse(reg.matches("\\(a\\*\\|b\\*|b\\*\\|a\\*\\)a"));
    }
 }
-  
