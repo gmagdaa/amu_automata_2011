@@ -27,7 +27,7 @@ public class TestAutomataToRegexp extends TestCase {
         automatonA.addTransition(q1, q3, new CharTransitionLabel('d'));
         automatonA.addTransition(q1, q2, new CharTransitionLabel('c'));
         automatonA.addLoop(q3, new CharTransitionLabel('d'));
-     
+
 
         String reg = AutomataToRegexp.createRegularExpression(automatonA);
         assertTrue(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
