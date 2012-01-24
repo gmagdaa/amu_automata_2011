@@ -39,6 +39,10 @@ public final class AutomataToRegexp {
         State initial = automaton.getInitialState();
         List<State> finalStates = new LinkedList<State>();
 
+        for (State state : automaton.allStates()) {
+            transitionLabels.put(hashOf(state, state), "");
+        }
+
         String label;
         List<State> next;       //lista tymczasowa.
         List<State> previous;   //lista tymczasowa.
@@ -296,9 +300,18 @@ public final class AutomataToRegexp {
                                     leave = true;
                             }
                         } else {
-                            i = i + j;
-                            leave = true;
+                            if (bracketStack.size() > 0) {
+                                j = i + j + 1;
+                                i = bracketStack.pop();
+                                removeBracket = bracketRemove.pop();
+                            } else {
+                                i = i + j;
+                                leave = true;
+                            }
                         }
+                    } else if (reg.charAt(i + j) == '|' && reg.charAt(i + j - 1) != QUOTE) {
+                        removeBracket = false;
+                        j++;
                     } else
                         j++;
                 } while (!leave);
@@ -318,7 +331,7 @@ public final class AutomataToRegexp {
 
         do {
             ind = reg.indexOf('*');
-            if (reg.charAt(ind - 1) == QUOTE)
+            if (ind != -1 && reg.charAt(ind - 1) == QUOTE)
                 ind = 0;
         } while(ind == 0);
 
