@@ -66,7 +66,7 @@ public class TestAutomataToRegexp extends TestCase {
         automatonC.addTransition(q0, q1, new CharTransitionLabel('a'));
         
         String reg = AutomataToRegexp.createRegularExpression(automatonC);
-        assertTrue(reg.matches("a\\?"));
+        assertTrue(reg.matches("\u03B5\\|a|a\\|\u03B5"));
         assertFalse(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
     }
     
