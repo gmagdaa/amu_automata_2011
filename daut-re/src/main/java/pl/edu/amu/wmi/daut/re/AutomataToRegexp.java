@@ -23,8 +23,8 @@ public final class AutomataToRegexp {
     private static Map<String, String> transitionLabelsBackup = new HashMap<String, String>();
     private static Stack<Integer> bracketStack = new Stack<Integer>();
     private static Stack<Boolean> bracketRemove = new Stack<Boolean>();
-    private static final char[] specialCharacters = { '?', '+', '*', '|', '.', 92 } ; //92 - \
-    private static final char quote = 28;
+    private static final char[] SPECIAL_CHARACTERS = {'?', '+', '*', '|', '.', 92 }; //92 - \
+    private static final char QUOTE = 28;
 
     /**
      * Domyslny konstruktor.
@@ -58,17 +58,18 @@ public final class AutomataToRegexp {
                         previousStates.put(target, previous);
                     }
                     label = out.getTransitionLabel().toString();
-                    for (char character : specialCharacters)
+                    for (char character : SPECIAL_CHARACTERS)
                         if (label.charAt(0) == character)
-                            label = quote + label;
+                            label = QUOTE + label;
                 } else {
                     label = transitionLabels.get(hashOf(state, target)) + '|';
-                    for (char character : specialCharacters)
+                    StringBuffer buf = new StringBuffer();
+                    for (char character : SPECIAL_CHARACTERS)
                         if (out.getTransitionLabel().toString().charAt(0) == character) {
-                            label = label + quote;
+                            buf.append(QUOTE);
                             break;
                         }
-                    label = label + out.getTransitionLabel().toString();
+                    label = label + buf.toString() + out.getTransitionLabel().toString();
                 }
                 transitionLabels.put(hashOf(state, target), label);
             }
@@ -148,7 +149,7 @@ public final class AutomataToRegexp {
         if (regexp.contains("(null)*"))
             regexp = regexp.replace("(null)*", "\u03B5");
 
-        return regexp.replace(String.valueOf(quote), "\\");
+        return regexp.replace(String.valueOf(QUOTE), "\\");
     }
 
     /**
@@ -277,7 +278,7 @@ public final class AutomataToRegexp {
                         removeBracket = true;
                     } else if (reg.charAt(i + j) == ')') {
                         if (removeBracket) {
-                            if (j == 2 && reg.contains(String.valueOf(quote)))
+                            if (j == 2 && reg.contains(String.valueOf(QUOTE)))
                                 leave = false;
                             else if (j > 2 && i + j + 1 < reg.length()
                                     && reg.charAt(i + j + 1) == '*') {
@@ -317,7 +318,7 @@ public final class AutomataToRegexp {
 
         do {
             ind = reg.indexOf('*');
-            if (reg.charAt(ind - 1) == quote)
+            if (reg.charAt(ind - 1) == QUOTE)
                 ind = 0;
         } while(ind == 0);
 
@@ -351,14 +352,14 @@ public final class AutomataToRegexp {
                             removeChars(reg, ind - 2 - len * 2, len);
                     }
                 }
-            } else if (reg.charAt(ind - 1) == quote) {
+            } else if (reg.charAt(ind - 1) == QUOTE) {
                 if (ind + 2 < reg.length() && reg.charAt(ind + 2) == character
-                        && reg.charAt(ind + 1) == quote) {
+                        && reg.charAt(ind + 1) == QUOTE) {
                             reg = replace(reg, ind, '+');
                             reg = removeChars(reg, ind + 1, 2);
                 }
                 if (ind - 2 * 2 >= 0 && reg.charAt(ind - 2 - 1) == character
-                        && reg.charAt(ind - 2 * 2) == quote) {
+                        && reg.charAt(ind - 2 * 2) == QUOTE) {
                         reg = replace(reg, ind, '+');
                         reg = removeChars(reg, ind - 2, 2);
                 }
