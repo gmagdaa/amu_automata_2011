@@ -8,7 +8,7 @@ package pl.edu.amu.wmi.daut.base;
  */
 public class OutgoingTransition {
     /**
-     * Konstruktor
+     * Konstruktor.
      */
     public OutgoingTransition(TransitionLabel aTransitionLabel, State aTargetState) {
         targetState = aTargetState;
