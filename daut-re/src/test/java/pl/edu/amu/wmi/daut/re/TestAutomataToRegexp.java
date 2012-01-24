@@ -5,8 +5,8 @@ import pl.edu.amu.wmi.daut.base.CharTransitionLabel;
 import pl.edu.amu.wmi.daut.base.NaiveAutomatonSpecification;
 import pl.edu.amu.wmi.daut.base.State;
 import junit.framework.TestCase;
-import util.regex.Pattern;
-import util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * Test klasy AutomataToRegexp.
