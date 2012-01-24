@@ -85,6 +85,7 @@ public class TestAutomataToRegexp extends TestCase {
         automatonD.addTransition(q0, q1, new CharTransitionLabel('b'));
         automatonD.addTransition(q1, q2, new CharTransitionLabel('a'));
         automatonD.addTransition(q1, q2, new CharTransitionLabel('b'));
+        automatonD.addTransition(q2, q1, new CharTransitionLabel('a'));
         automatonD.addLoop(q2, new CharTransitionLabel('b'));
 
         String reg = AutomataToRegexp.createRegularExpression(automatonD);
