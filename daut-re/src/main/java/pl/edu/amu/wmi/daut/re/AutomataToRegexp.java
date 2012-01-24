@@ -23,11 +23,8 @@ public final class AutomataToRegexp {
     private static Map<String, String> transitionLabelsBackup = new HashMap<String, String>();
     private static Stack<Integer> bracketStack = new Stack<Integer>();
     private static Stack<Boolean> bracketRemove = new Stack<Boolean>();
-
-    /**
-     * Domyslny konstruktor.
-     */
-    private AutomataToRegexp() { }
+    private static char[] specialCharacters = { '?', '+', '*', '|', '.', 92 }; //92 - /
+    private static char quote = 28;
 
     /**
      * Konwertuje automat do wyrazenia regularnego.
@@ -37,23 +34,36 @@ public final class AutomataToRegexp {
         State initial = automaton.getInitialState();
         List<State> finalStates = new LinkedList<State>();
 
+        String label;
         List<State> next;       //lista tymczasowa.
         List<State> previous;   //lista tymczasowa.
         for (State state : automaton.allStates()) {
             next = new LinkedList<State>();
             for (OutgoingTransition out : automaton.allOutgoingTransitions(state)) {
                 State target = out.getTargetState();
-                next.add(target);
-                if (previousStates.containsKey(target)) {
-                    previous = previousStates.get(target);
-                    previous.add(state);
-                    previousStates.put(target, previous);
+                if (!next.contains(target)) {
+                    next.add(target);
+                    if (previousStates.containsKey(target)) {
+                        previous = previousStates.get(target);
+                        previous.add(state);
+                        previousStates.put(target, previous);
+                    } else {
+                        previous = new LinkedList<State>();
+                        previous.add(state);
+                        previousStates.put(target, previous);
+                    }
+                    label = out.getTransitionLabel().toString();
+                    for (char character : specialCharacters)
+                        if (label.charAt(0) == character)
+                            label = quote + label;
                 } else {
-                    previous = new LinkedList<State>();
-                    previous.add(state);
-                    previousStates.put(target, previous);
+                    label = transitionLabels.get(hashOf(state, target)) + '|';
+                    for (char character : specialCharacters)
+                        if (out.getTransitionLabel().toString().charAt(0) == character)
+                            label = label + quote;
+                    label = label + out.getTransitionLabel().toString();
                 }
-                transitionLabels.put(hashOf(state, target), out.getTransitionLabel().toString());
+                transitionLabels.put(hashOf(state, target), label);
             }
             nextStates.put(state, next);
             if (automaton.isFinal(state))
@@ -127,9 +137,11 @@ public final class AutomataToRegexp {
             transitionLabels.putAll(transitionLabelsBackup);
         }
 
+        regexp = fixKleene(fixBrackets(regexp));
         if (regexp.contains("(null)*"))
             regexp = regexp.replace("(null)*", "\u03B5");
-        return fixKleene(fixBrackets(regexp));
+        
+        return regexp.replace(String.valueOf(quote), "\\");
     }
 
     /**
@@ -171,18 +183,20 @@ public final class AutomataToRegexp {
                 spn = getLabel(previous, next);
 
                 if (spn.length() > 0)
-                    spn = spn + "|" + "(" + sp + ")" + "(" + u + ")*" + "(" + sn + ")";
+                    spn = "(" + spn+ ")" + "|" + "(" + sp + ")" + "(" + u + ")*" + "(" + sn + ")";
                 else
                     spn = "(" + sp + ")" + "(" + u + ")*" + "(" + sn + ")";
                 if (tp.length() > 0) {
                     if (rp.length() > 0)
-                        rp = rp + "|" + "(" + sp + ")" + "(" + u + ")*" + "(" + tp + ")";
+                        rp = "(" + rp + ")" + "|" + "(" + sp + ")" + "(" + u + ")*" + 
+                                "(" + tp + ")";
                     else
                         rp = "(" + sp + ")" + "(" + u + ")*" + "(" + tp + ")";
                 }
                 if (tn.length() > 0) {
                     if (rn.length() > 0)
-                        rn = rn + "|" + "(" + tn + ")" + "(" + u + ")*" + "(" + sn + ")";
+                        rn = "(" + rn + ")" + "|" + "(" + tn + ")" + "(" + u + ")*" +
+                                "(" + sn + ")";
                     else
                         rn = "(" + tn + ")" + "(" + u + ")*" + "(" + sn + ")";
                 }
@@ -256,11 +270,13 @@ public final class AutomataToRegexp {
                         removeBracket = true;
                     } else if (reg.charAt(i + j) == ')') {
                         if (removeBracket) {
-                            if (i + j + 1 < reg.length() && j - i > 2)
-                                if (reg.charAt(i + j + 1) == '*') {
-                                    i = i + j + 1;
-                                    leave = true;
-                                }
+                            if (j == 2 && reg.contains(String.valueOf(quote)))
+                                leave = false;
+                            else if (j > 2 && i + j + 1 < reg.length()
+                                    && reg.charAt(i + j + 1) == '*') {
+                                i = i + j + 1;
+                                leave = true;
+                            }
                             if (!leave) {
                                 reg = removeChars(reg, i + j, 1);
                                 reg = removeChars(reg, i, 1);
@@ -275,9 +291,6 @@ public final class AutomataToRegexp {
                             i = i + j;
                             leave = true;
                         }
-                    } else if (reg.charAt(i + j) == '|') {
-                        removeBracket = false;
-                        j++;
                     } else
                         j++;
                 } while (!leave);
@@ -292,9 +305,15 @@ public final class AutomataToRegexp {
      * Poprawia zapis znajdujac pozytywne domkniecia Kleene'ego.
      */
     private static String fixKleene(String reg) {
-        int ind = reg.indexOf('*');
-        int beg, len;
+        int ind, beg, len;
         String expr;
+
+        do {
+            ind = reg.indexOf('*');
+            if(reg.charAt(ind - 1) == quote)
+                ind = -2;
+        } while(ind == -2);
+
         while (ind >= 1) {
             char character = reg.charAt(ind - 1);
             if (character == ')') {
@@ -302,40 +321,48 @@ public final class AutomataToRegexp {
                 expr = reg.substring(beg + 1, ind - 1);
                 len = expr.length();
                 if (expr.contains("|")) {
-                    if (ind + len + 2 < reg.length())
-                        if (reg.substring(ind + 1, ind + 1 + len + 2).equals("(" + expr + ")")) {
+                    if (ind + len + 2 < reg.length()
+                            && reg.substring(ind + 1, ind + 1 + len + 2).equals("(" + expr + ")")) {
                             replace(reg, ind, '+');
                             removeChars(reg, ind + 1, len + 2);
-                        }
-                    if (ind - (2 - len) * 2 >= 0)
-                        if (reg.substring(ind - (2 - len) * 2, ind - 2 - len).equals(
+                    }
+                    if (ind - (2 + len) * 2 >= 0
+                            && reg.substring(ind - (2 + len) * 2, ind - 2 - len).equals(
                                 "(" + expr + ")")) {
                             replace(reg, ind, '+');
-                            removeChars(reg, ind - (2 - len) * 2, len + 2);
-                        }
+                            removeChars(reg, ind - (2 + len) * 2, len + 2);
+                    } 
                 } else {
-                    if (ind + len < reg.length())
-                        if (reg.substring(ind + 1, ind + 1 + len).equals(expr)) {
+                    if (ind + len < reg.length()
+                            && reg.substring(ind + 1, ind + 1 + len).equals(expr)) {
                             replace(reg, ind, '+');
                             removeChars(reg, ind + 1, len);
-                        }
-                    if (ind - 2 - len * 2 >= 0)
-                        if (reg.substring(ind - 2 - len * 2, ind - 2 - len).equals(expr)) {
+                    }
+                    if (ind - 2 - len * 2 >= 0
+                        && reg.substring(ind - 2 - len * 2, ind - 2 - len).equals(expr)) {
                             replace(reg, ind, '+');
                             removeChars(reg, ind - 2 - len * 2, len);
-                        }
+                    }
+                }
+            } else if (reg.charAt(ind - 1) == quote) {
+                if (ind + 2 < reg.length() && reg.charAt(ind + 2) == character
+                        && reg.charAt(ind + 1) == quote) {
+                            reg = replace(reg, ind, '+');
+                            reg = removeChars(reg, ind + 1, 2);
+                }
+                if (ind - 2 * 2 >= 0 && reg.charAt(ind - 2 - 1) == character
+                        && reg.charAt(ind - 2 * 2) == quote) {
+                        reg = replace(reg, ind, '+');
+                        reg = removeChars(reg, ind - 2, 2);
                 }
             } else {
-                if (ind + 1 < reg.length())
-                    if (reg.charAt(ind + 1) == character) {
+                if (ind + 1 < reg.length() && reg.charAt(ind + 1) == character) {
                             reg = replace(reg, ind, '+');
                             reg = removeChars(reg, ind + 1, 1);
-                        }
-                if (ind - 2 >= 0) {
-                    if (reg.charAt(ind - 2) == character) {
+                }
+                if (ind - 2 >= 0 && reg.charAt(ind - 2) == character) {
                         reg = replace(reg, ind, '+');
                         reg = removeChars(reg, ind - 2, 1);
-                    }
                 }
             }
             ind = reg.indexOf('*', ind + 1);
