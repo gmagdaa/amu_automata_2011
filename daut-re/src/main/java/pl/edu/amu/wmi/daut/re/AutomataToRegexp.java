@@ -23,8 +23,13 @@ public final class AutomataToRegexp {
     private static Map<String, String> transitionLabelsBackup = new HashMap<String, String>();
     private static Stack<Integer> bracketStack = new Stack<Integer>();
     private static Stack<Boolean> bracketRemove = new Stack<Boolean>();
-    private static char[] specialCharacters = { '?', '+', '*', '|', '.', 92 }; //92 - /
-    private static char quote = 28;
+    private static final char[] specialCharacters = { '?', '+', '*', '|', '.', 92 } ; //92 - \
+    private static final char quote = 28;
+
+    /**
+     * Domyslny konstruktor.
+     */
+    private AutomataToRegexp() { }
 
     /**
      * Konwertuje automat do wyrazenia regularnego.
@@ -59,8 +64,10 @@ public final class AutomataToRegexp {
                 } else {
                     label = transitionLabels.get(hashOf(state, target)) + '|';
                     for (char character : specialCharacters)
-                        if (out.getTransitionLabel().toString().charAt(0) == character)
+                        if (out.getTransitionLabel().toString().charAt(0) == character) {
                             label = label + quote;
+                            break;
+                        }
                     label = label + out.getTransitionLabel().toString();
                 }
                 transitionLabels.put(hashOf(state, target), label);
@@ -140,7 +147,7 @@ public final class AutomataToRegexp {
         regexp = fixKleene(fixBrackets(regexp));
         if (regexp.contains("(null)*"))
             regexp = regexp.replace("(null)*", "\u03B5");
-        
+
         return regexp.replace(String.valueOf(quote), "\\");
     }
 
@@ -183,20 +190,20 @@ public final class AutomataToRegexp {
                 spn = getLabel(previous, next);
 
                 if (spn.length() > 0)
-                    spn = "(" + spn+ ")" + "|" + "(" + sp + ")" + "(" + u + ")*" + "(" + sn + ")";
+                    spn = "(" + spn + ")" + "|" + "(" + sp + ")" + "(" + u + ")*" + "(" + sn + ")";
                 else
                     spn = "(" + sp + ")" + "(" + u + ")*" + "(" + sn + ")";
                 if (tp.length() > 0) {
                     if (rp.length() > 0)
-                        rp = "(" + rp + ")" + "|" + "(" + sp + ")" + "(" + u + ")*" + 
-                                "(" + tp + ")";
+                        rp = "(" + rp + ")" + "|" + "(" + sp + ")" + "(" + u + ")*"
+                                + "(" + tp + ")";
                     else
                         rp = "(" + sp + ")" + "(" + u + ")*" + "(" + tp + ")";
                 }
                 if (tn.length() > 0) {
                     if (rn.length() > 0)
-                        rn = "(" + rn + ")" + "|" + "(" + tn + ")" + "(" + u + ")*" +
-                                "(" + sn + ")";
+                        rn = "(" + rn + ")" + "|" + "(" + tn + ")" + "(" + u + ")*"
+                                + "(" + sn + ")";
                     else
                         rn = "(" + tn + ")" + "(" + u + ")*" + "(" + sn + ")";
                 }
@@ -310,9 +317,9 @@ public final class AutomataToRegexp {
 
         do {
             ind = reg.indexOf('*');
-            if(reg.charAt(ind - 1) == quote)
-                ind = -2;
-        } while(ind == -2);
+            if (reg.charAt(ind - 1) == quote)
+                ind = 0;
+        } while(ind == 0);
 
         while (ind >= 1) {
             char character = reg.charAt(ind - 1);
@@ -331,7 +338,7 @@ public final class AutomataToRegexp {
                                 "(" + expr + ")")) {
                             replace(reg, ind, '+');
                             removeChars(reg, ind - (2 + len) * 2, len + 2);
-                    } 
+                    }
                 } else {
                     if (ind + len < reg.length()
                             && reg.substring(ind + 1, ind + 1 + len).equals(expr)) {
