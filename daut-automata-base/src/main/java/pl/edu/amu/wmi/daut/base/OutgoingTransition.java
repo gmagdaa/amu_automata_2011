@@ -6,7 +6,7 @@ package pl.edu.amu.wmi.daut.base;
  *
  * Stan źródłowy nie jest tu uwzględniany.
  */
-class OutgoingTransition {
+public class OutgoingTransition {
     public OutgoingTransition(TransitionLabel aTransitionLabel, State aTargetState) {
         targetState = aTargetState;
         transitionLabel = aTransitionLabel;
