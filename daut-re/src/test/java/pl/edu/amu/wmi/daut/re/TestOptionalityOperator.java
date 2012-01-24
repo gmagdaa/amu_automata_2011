@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import junit.framework.TestCase;
 
 /**
- * Test klasy OptionalityOperator.
- */
+*
+* Test klasy OptionalityOperator.
+*/
 public class TestOptionalityOperator extends TestCase {
 
     /**
-     * Test metody createAutomatonFromOneAutomaton.
-     */
+* Test metody createAutomatonFromOneAutomaton.
+*/
     public final void testCreateAutomatonFromOneAutomaton() {
 
         AutomatonSpecification automaton = new NaiveAutomatonSpecification();
@@ -53,8 +54,8 @@ public class TestOptionalityOperator extends TestCase {
     }
 
     /**
-     * Test fabryki.
-     */
+* Test fabryki.
+*/
     public final void testFactory() {
 
         Factory factory = new Factory();
