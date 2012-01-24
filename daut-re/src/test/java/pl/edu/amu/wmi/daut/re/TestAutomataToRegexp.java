@@ -88,7 +88,7 @@ public class TestAutomataToRegexp extends TestCase {
         automatonD.addLoop(q2, new CharTransitionLabel('b'));
 
         String reg = AutomataToRegexp.createRegularExpression(automatonD);
-        assertTrue(reg.matches("a*b(a|b) |  (b|a)(b*|a(a|b)|(b|a))   | (a|b*) "));
-        assertFalse(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
+        assertTrue(reg.matches("a\\*b\\(a\\|b|b\\|a\\)b\\*\\|a\\(a\\|b|b\\|a\\)\\*"));
+        assertFalse(reg.matches("a\\(a\\|b|b\\|a\\)\\*\\|a\\*b\\(a\\|b|b\\|a\\)b\\*"));
     }
 }
