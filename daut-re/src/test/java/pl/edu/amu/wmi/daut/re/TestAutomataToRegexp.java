@@ -55,20 +55,20 @@ public class TestAutomataToRegexp extends TestCase {
 /**
  * Test klasy AutomataToRegexp C.
  */   
-    //public final void testRegC() {
+    public final void testRegC() {
+
+        AutomatonSpecification automatonC = new NaiveAutomatonSpecification();
+        State q0 = automatonC.addState();
+        State q1 = automatonC.addState();
+        automatonC.markAsInitial(q0);
+        automatonC.markAsFinal(q0);
+        automatonC.markAsFinal(q1);
+        automatonC.addTransition(q0, q1, new CharTransitionLabel('a'));
         
-      //  AutomatonSpecification automatonC = new NaiveAutomatonSpecification();
-     //   State q0 = automatonC.addState();
-      //  State q1 = automatonC.addState();
-      //  automatonC.markAsInitial(q0);
-      //  automatonC.markAsFinal(q0);
-      //  automatonC.markAsFinal(q1);
-      //  automatonC.addTransition(q0, q1, new CharTransitionLabel('a'));
-        
-       // String reg = AutomataToRegexp.createRegularExpression(automatonC);
-        //assertTrue(reg.matches("a\\?"));
-       // assertFalse(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
-   // }
+        String reg = AutomataToRegexp.createRegularExpression(automatonC);
+        assertTrue(reg.matches("a\\?"));
+        assertFalse(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
+    }
     
 /**
  * Test klasy AutomataToRegexp D.
@@ -89,6 +89,6 @@ public class TestAutomataToRegexp extends TestCase {
 
         String reg = AutomataToRegexp.createRegularExpression(automatonD);
         assertTrue(reg.matches("a\\*b\\(a\\|b|b\\|a\\)b\\*\\|a\\(a\\|b|b\\|a\\)\\*"));
-        assertFalse(reg.matches("a\\(a\\|b|b\\|a\\)\\*\\|a\\*b\\(a\\|b|b\\|a\\)b\\*"));
+        assertTrue(reg.matches("a\\(a\\|b|b\\|a\\)\\*\\|a\\*b\\(a\\|b|b\\|a\\)b\\*"));
     }
 }
