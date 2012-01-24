@@ -303,6 +303,7 @@ public final class AutomataToRegexp {
                             if (bracketStack.size() > 0) {
                                 j = i + j + 1;
                                 i = bracketStack.pop();
+                                j = j - i;
                                 removeBracket = bracketRemove.pop();
                             } else {
                                 i = i + j;
