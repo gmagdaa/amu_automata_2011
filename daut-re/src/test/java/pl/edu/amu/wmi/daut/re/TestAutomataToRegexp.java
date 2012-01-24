@@ -88,7 +88,7 @@ public class TestAutomataToRegexp extends TestCase {
         automatonD.addTransition(q2, q1, new CharTransitionLabel('a'));
         automatonD.addLoop(q2, new CharTransitionLabel('b'));
 
-        String reg = AutomataToRegexp.createRegularExpression(automatonD); 
+        String reg = AutomataToRegexp.createRegularExpression(automatonD);
         Pattern pat = Pattern.compile("a\\*b\\(a\\|b|b\\|a\\)\\(b\\|a\\(a\\|b|b\\|a\\)|a\\(a\\|b|b\\|a\\)\\|b\\)\\*");
         Matcher mat = pat.matcher(reg);
         assertTrue(mat.find());
