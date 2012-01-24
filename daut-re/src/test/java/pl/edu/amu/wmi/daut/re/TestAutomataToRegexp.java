@@ -10,7 +10,14 @@ import junit.framework.TestCase;
  * Test klasy AutomataToRegexp.
  */
 public class TestAutomataToRegexp extends TestCase {
+<<<<<<< HEAD
+    
+/**
+ * Test klasy AutomataToRegexp A.
+ */   
+=======
    
+>>>>>>> d89807cadbe23625fade48e14c8714d3232b320b
     public final void testRegA() {
 
         AutomatonSpecification automatonA = new NaiveAutomatonSpecification();
@@ -33,4 +40,41 @@ public class TestAutomataToRegexp extends TestCase {
         assertTrue(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
         assertFalse(reg.matches("\\(a\\*\\|b\\*|b\\*\\|a\\*\\)a"));
    }
+<<<<<<< HEAD
+    
+/**
+ * Test klasy AutomataToRegexp B.
+ */   
+    public final void testRegB() {
+        
+        AutomatonSpecification automatonB = new NaiveAutomatonSpecification();
+        State q0 = automatonB.addState();
+        automatonB.markAsInitial(q0);
+        automatonB.markAsFinal(q0);
+        
+        String reg = AutomataToRegexp.createRegularExpression(automatonB);
+        assertTrue(reg.matches("\u03B5"));
+        assertFalse(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
+    }
+
+/**
+ * Test klasy AutomataToRegexp C.
+ */   
+    public final void testRegC() {
+        
+        AutomatonSpecification automatonC = new NaiveAutomatonSpecification();
+        State q0 = automatonC.addState();
+        State q1 = automatonC.addState();
+        automatonC.markAsInitial(q0);
+        automatonC.markAsFinal(q0);
+        automatonC.markAsFinal(q1);
+        automatonC.addTransition(q0, q1, new CharTransitionLabel('a'));
+        
+        String reg = AutomataToRegexp.createRegularExpression(automatonC);
+        assertTrue(reg.matches("\u03B5"));
+        assertFalse(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
+    }
+
+=======
+>>>>>>> d89807cadbe23625fade48e14c8714d3232b320b
 }
