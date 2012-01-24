@@ -10,14 +10,10 @@ import junit.framework.TestCase;
  * Test klasy AutomataToRegexp.
  */
 public class TestAutomataToRegexp extends TestCase {
-<<<<<<< HEAD
     
-/**
- * Test klasy AutomataToRegexp A.
- */   
-=======
-   
->>>>>>> d89807cadbe23625fade48e14c8714d3232b320b
+   /**
+    * Test klasy AutomataToRegexp A.
+    */   
     public final void testRegA() {
 
         AutomatonSpecification automatonA = new NaiveAutomatonSpecification();
@@ -40,11 +36,10 @@ public class TestAutomataToRegexp extends TestCase {
         assertTrue(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
         assertFalse(reg.matches("\\(a\\*\\|b\\*|b\\*\\|a\\*\\)a"));
    }
-<<<<<<< HEAD
-    
-/**
- * Test klasy AutomataToRegexp B.
- */   
+
+   /**
+    * Test klasy AutomataToRegexp B.
+    */   
     public final void testRegB() {
         
         AutomatonSpecification automatonB = new NaiveAutomatonSpecification();
@@ -71,10 +66,29 @@ public class TestAutomataToRegexp extends TestCase {
         automatonC.addTransition(q0, q1, new CharTransitionLabel('a'));
         
         String reg = AutomataToRegexp.createRegularExpression(automatonC);
-        assertTrue(reg.matches("\u03B5"));
+        assertTrue(reg.matches("a\\?"));
         assertFalse(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
     }
-
-=======
->>>>>>> d89807cadbe23625fade48e14c8714d3232b320b
+    
+/**
+ * Test klasy AutomataToRegexp D.
+ */   
+    public final void testRegD() {
+        
+        AutomatonSpecification automatonD = new NaiveAutomatonSpecification();
+        State q0 = automatonD.addState();
+        State q1 = automatonD.addState();
+        State q2 = automatonD.addState();
+        automatonD.markAsInitial(q0);
+        automatonD.markAsFinal(q2);
+        automatonD.addLoop(q0, new CharTransitionLabel('a'));
+        automatonD.addTransition(q0, q1, new CharTransitionLabel('b'));
+        automatonD.addTransition(q1, q2, new CharTransitionLabel('a'));
+        automatonD.addTransition(q1, q2, new CharTransitionLabel('b'));
+        automatonD.addLoop(q2, new CharTransitionLabel('b'));
+        
+        String reg = AutomataToRegexp.createRegularExpression(automatonD);
+        assertTrue(reg.matches("a\\?"));
+        assertFalse(reg.matches("\\(b\\|ac\\)\\|ad\\+|\\(ac\\|b\\)\\|ad\\+|ad\\+\\|\\(b\\|ac\\)|ad\\+\\(ac\\|b\\)"));
+    }
 }
