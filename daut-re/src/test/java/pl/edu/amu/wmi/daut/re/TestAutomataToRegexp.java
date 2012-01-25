@@ -117,26 +117,16 @@ public class TestAutomataToRegexp extends TestCase {
         automatonE.addTransition(q2, q1, new CharTransitionLabel('b'));
         automatonE.addTransition(q2, q2, new CharTransitionLabel('a'));
         String reg = AutomataToRegexp.createRegularExpression(automatonE);
-        boolean ok = false;
-        if(reg.equals("b\\*\\|b\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*\\|b\\*ab\\*a\\(a\\|"
-                + "b\\+a|b\\+a\\|a\\)\\*"))
-            ok = true;
-        if(reg.equals("b\\*\\|b\\*ab\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*\\|b\\*a\\(b\\|"
-                + "a\\+b|a\\+b\\|b\\)\\*"))
-            ok = true;
-        if(reg.equals("b\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*\\|b\\*\\|b\\*ab\\*a\\(a\\|"
-                + "b\\+a|b\\+a\\|a\\)\\*"))
-            ok = true;
-        if(reg.equals("b\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*\\|b\\*ab\\*a\\(a\\|b\\+a|"
-                + "b\\+a\\|a\\)\\*\\|b\\*"))
-            ok = true;
-        if(reg.equals("b\\*ab\\*a\\(a\\|b\\+a|b\\+a\\|a\\)\\*\\|b\\*\\|b\\*a\\(b\\|"
-                + "a\\+b|a\\+b\\|b\\)\\*"))
-            ok = true;
-        if(reg.equals("b\\*ab\\*a\\(a\\|b\\+a|b\\+a\\|a\\)\\*\\|b\\*a\\(b\\|a\\+b|"
-                + "a\\+b\\|b\\)\\*\\|b\\*"))
-            ok = true;
-        assertTrue(ok);
+        Pattern pat = Pattern.compile("b\\*\\|b\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*\\|b\\*ab\\*a\\(a\\|"
+                + "b\\+a|b\\+a\\|a\\)\\*|b\\*\\|b\\*ab\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*\\"
+                + "|b\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*|b\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*\\|b\\*\\|"
+                + "b\\*ab\\*a\\(a\\|b\\+a|b\\+a\\|a\\)\\*|b\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*\\|"
+                + "b\\*ab\\*a\\(a\\|b\\+a|b\\+a\\|a\\)\\*\\|b\\*|b\\*ab\\*a\\(a\\|b\\+a|b\\+a\\|"
+                + "a\\)\\*\\|b\\*\\|b\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*|b\\*ab\\*a\\(a\\|b\\+a|"
+                + "b\\+a\\|a\\)\\*\\|b\\*a\\(b\\|a\\+b|a\\+b\\|b\\)\\*\\|b\\*");
+        Matcher mat = pat.matcher(reg);
+        assertTrue(mat.find());
+
     }
 
 /**
@@ -155,7 +145,7 @@ public class TestAutomataToRegexp extends TestCase {
 
         String reg = AutomataToRegexp.createRegularExpression(automatonF);
         Pattern pat = Pattern.compile("\\(k\\|\\(\\+\\|\\?|\\?\\|\\+\\)d\\)\\*\\(\\+\\|\\?|\\?\\|"
-                + "\\+\\)|\\(\\(\\+\\|\\?|\\?\\|\\+\\)d\\|k\\)\\*(\\+\\|\\?|\\?\\|\\+\\)");
+                + "\\+\\)|\\(\\(\\+\\|\\?|\\?\\|\\+\\)d\\|k\\)\\*\\(\\+\\|\\?|\\?\\|\\+\\)");
         Matcher mat = pat.matcher(reg);
         assertTrue(mat.find());
         assertFalse(reg.matches("\\(\\(\\+\\|\\?|\\?\\|\\+\\)\\)\\*"));
