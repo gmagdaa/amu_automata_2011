@@ -150,8 +150,6 @@ public final class AutomataToRegexp {
         }
 
         regexp = fixKleene(fixBrackets(regexp));
-        if (regexp.contains("(null)*"))
-            regexp = regexp.replace("(null)*", "\u03B5");
 
         return regexp.replace(String.valueOf(QUOTE), "\\");
     }
@@ -266,8 +264,6 @@ public final class AutomataToRegexp {
             reg = removeChars(reg, reg.indexOf("()*"), "()*".length());
 
         int i = reg.indexOf("(");
-        if (i == -1)
-            return reg;
         do {
             if (reg.charAt(i) == '(') {
                 int j = 1;
