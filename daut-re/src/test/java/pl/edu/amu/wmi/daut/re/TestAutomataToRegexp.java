@@ -158,6 +158,6 @@ public class TestAutomataToRegexp extends TestCase {
                 + "\\+\\)|\\(\\(\\+\\|\\?|\\?\\|\\+\\)d\\|k\\)\\*(\\+\\|\\?|\\?\\|\\+\\)");
         Matcher mat = pat.matcher(reg);
         assertTrue(mat.find());
-        assertFalse(reg.matches("\\(\\(\\+\\|\\?|\\?\\|\\+\\)\\|k\\)\\*"));
+        assertFalse(reg.matches("\\(\\(\\+\\|\\?|\\?\\|\\+\\)\\)\\*"));
     }
 }
