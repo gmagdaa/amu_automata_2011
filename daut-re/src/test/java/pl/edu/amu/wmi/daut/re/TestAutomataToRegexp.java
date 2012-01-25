@@ -144,8 +144,7 @@ public class TestAutomataToRegexp extends TestCase {
         automatonF.addLoop(q0, new CharTransitionLabel('k'));
 
         String reg = AutomataToRegexp.createRegularExpression(automatonF);
-        Pattern pat = Pattern.compile("\\(k\\|\\(\\+\\|\\?|\\?\\|\\+\\)d\\)\\*\\(\\+\\|\\?|\\?\\|"
-                + "\\+\\)");
+        Pattern pat = Pattern.compile("\\(k\\|\\(\\\\+\\|\\\\?\\)d\\)\\*\\(\\\\+\\|\\\\?\\)");
         Matcher mat = pat.matcher(reg);
         assertTrue(mat.find());
         assertFalse(reg.matches("\\(\\(\\+\\|\\?|\\?\\|\\+\\)\\)\\*"));
