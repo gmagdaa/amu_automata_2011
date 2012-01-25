@@ -73,7 +73,7 @@ public class TestAutomataToRegexp extends TestCase {
     }
 
 /**
- * Test klasy AutomataToRegexp  D.
+ * Test klasy AutomataToRegexp D.
  */
     public final void testRegD() {
 
