@@ -130,7 +130,7 @@ public class TestAutomataToRegexp extends TestCase {
     }
 
 /**
- * Test klasy AutomataToRegexp F.
+ * Test klasy AutomataToRegexp  F.
  */
     public final void testRegF() {
         AutomatonSpecification automatonF = new NaiveAutomatonSpecification();
