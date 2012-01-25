@@ -9,7 +9,7 @@ package pl.edu.amu.wmi.daut.base;
 public class OutgoingTransition {
     /**
      * Konstruktor.
-     * /
+     */
     public OutgoingTransition(TransitionLabel aTransitionLabel, State aTargetState) {
         targetState = aTargetState;
         transitionLabel = aTransitionLabel;
@@ -17,14 +17,14 @@ public class OutgoingTransition {
 
     /**
      * Pobiera docelowy stan.
-     * /
+     */
     public State getTargetState() {
         return targetState;
     }
 
     /**
      * Pobiera etykiete przejscia.
-     * /
+     */
     public TransitionLabel getTransitionLabel() {
         return transitionLabel;
     }
